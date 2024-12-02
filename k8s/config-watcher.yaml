@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-watcher
+spec:
+  selector:
+    matchLabels:
+      app: config-watcher
+  template:
+    metadata:
+      labels:
+        app: config-watcher
+    spec:
+      serviceAccountName: dynamic-config-poc-sa
+      containers:
+      - name: config-watcher
+        image: springcloud/spring-cloud-kubernetes-configuration-watcher:3.0.2
+        env:
+        - name: SPRING_CLOUD_KUBERNETES_CONFIGURATION_WATCHER_LOGGING_LEVEL
+          value: "DEBUG"
+        - name: SPRING_CLOUD_KUBERNETES_CONFIGURATION_WATCHER_ENABLED
+          value: "true"
+        - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLED
+          value: "false"

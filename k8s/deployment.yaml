@@ -12,9 +12,10 @@ spec:
       labels:
         app: dynamic-config-poc
     spec:
+      serviceAccountName: dynamic-config-poc-sa
       containers:
       - name: dynamic-config-poc
-        image: dynamic-config-poc:latest
+        image: dynamic-config-poc:sck
         imagePullPolicy: Never
         ports:
         - containerPort: 8080
