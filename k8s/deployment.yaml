@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamic-config-poc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dynamic-config-poc
+  template:
+    metadata:
+      labels:
+        app: dynamic-config-poc
+    spec:
+      containers:
+      - name: dynamic-config-poc
+        image: dynamic-config-poc:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config
+          mountPath: /config
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: config
+        configMap:
+          name: dynamic-config-poc
+          items:
+          - key: application.properties
+            path: application.properties
